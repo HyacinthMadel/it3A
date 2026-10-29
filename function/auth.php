@@ -8,6 +8,7 @@ function loginUser(PDO $pdo, string $login, string $password): bool
         WHERE user_username = ? OR user_email = ?
         LIMIT 1
     ");
+
     $stmt->execute([$login, $login]);
     $user = $stmt->fetch();
 
@@ -17,11 +18,29 @@ function loginUser(PDO $pdo, string $login, string $password): bool
 
     session_regenerate_id(true);
 
-    $_SESSION['user_id']    = $user['user_id'];
+    $_SESSION['user_id'] = $user['user_id'];
     $_SESSION['user_email'] = $user['user_email'];
-    $_SESSION['user_role']  = $user['user_role'];
+    $_SESSION['user_role'] = $user['user_role'];
 
     startUserSession($pdo);
 
     return true;
+}
+
+function requireRole(string $role): void
+{
+    // Check if the user is logged in
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: ' . BASE_URL . '/index.php');
+        exit;
+    }
+
+    // Check if the user has the required role
+    if (
+        !isset($_SESSION['user_role']) ||
+        strtolower($_SESSION['user_role']) !== strtolower($role)
+    ) {
+        header('Location: ' . BASE_URL . '/index.php');
+        exit;
+    }
 }

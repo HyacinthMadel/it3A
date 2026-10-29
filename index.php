@@ -1,6 +1,8 @@
 <?php
 
-require __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/function/activity.php';
+require_once __DIR__ . '/function/auth.php';
 
 if (isset($_SESSION['user_id'])) {
     header('Location: ' . BASE_URL . '/app/' . $_SESSION['user_role'] . '/index.php');

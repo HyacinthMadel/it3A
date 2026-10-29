@@ -7,10 +7,10 @@ require_once __DIR__ . '/../function/auth.php';
 require_once __DIR__ . '/../function/redirect.php';
 require_once __DIR__ . '/../function/sessions.php';
 
-define('BASE_URL', 'http://localhost/it34a');
+define('BASE_URL', 'http://localhost/it3A');
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'it34a');
+define('DB_NAME', 'it3A_lab_db');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 

@@ -1,7 +1,10 @@
 <?php
 
 require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../../function/activity.php';
+require_once __DIR__ . '/../../function/auth.php';
 
+// Check admin role
 requireRole('admin');
 
 // Get all activity logs
@@ -51,35 +54,33 @@ $activities = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($activities as $activity): ?>
 
                 <tr>
-
                     <td>
-                        <?= htmlspecialchars($activity['activity_log_id'] ?? '') ?>
+                        <?= htmlspecialchars((string) ($activity['activity_log_id'] ?? '')) ?>
                     </td>
 
                     <td>
-                        <?= htmlspecialchars($activity['user_id'] ?? '') ?>
+                        <?= htmlspecialchars((string) ($activity['user_id'] ?? '')) ?>
                     </td>
 
                     <td>
-                        <?= htmlspecialchars($activity['activity_log_action'] ?? '') ?>
+                        <?= htmlspecialchars((string) ($activity['activity_log_action'] ?? '')) ?>
                     </td>
 
                     <td>
-                        <?= htmlspecialchars($activity['activity_log_status'] ?? '') ?>
+                        <?= htmlspecialchars((string) ($activity['activity_log_status'] ?? '')) ?>
                     </td>
 
                     <td>
-                        <?= htmlspecialchars($activity['activity_log_ip_address'] ?? '') ?>
+                        <?= htmlspecialchars((string) ($activity['activity_log_ip_address'] ?? '')) ?>
                     </td>
 
                     <td>
-                        <?= htmlspecialchars($activity['activity_log_user_agent'] ?? '') ?>
+                        <?= htmlspecialchars((string) ($activity['activity_log_user_agent'] ?? '')) ?>
                     </td>
 
                     <td>
-                        <?= htmlspecialchars($activity['activity_log_created_at'] ?? '') ?>
+                        <?= htmlspecialchars((string) ($activity['activity_log_created_at'] ?? '')) ?>
                     </td>
-
                 </tr>
 
             <?php endforeach; ?>

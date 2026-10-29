@@ -1,35 +1,41 @@
 <?php
 
-function startUserSession(PDO $pdo): bool
+function startUserSession(PDO $pdo): void
 {
-    if (!isset($_SESSION['user_id'])) {
-        return false;
-    }
-
     $stmt = $pdo->prepare("
         INSERT INTO user_sessions (user_id, session_start)
-        VALUES (:user_id, NOW())
+        VALUES (?, CURRENT_TIMESTAMP)
     ");
-    $stmt->execute([':user_id' => $_SESSION['user_id']]);
 
-    $_SESSION['db_session_id'] = (int) $pdo->lastInsertId();
+    $stmt->execute([$_SESSION['user_id']]);
 
-    return true;
+    $_SESSION['session_id'] = (int) $pdo->lastInsertId();
 }
 
-function endUserSession(PDO $pdo): bool
+function endUserSession(PDO $pdo): void
 {
-    if (!isset($_SESSION['db_session_id'])) {
-        return false;
+    if (!isset($_SESSION['session_id'])) {
+        return;
     }
 
     $stmt = $pdo->prepare("
         UPDATE user_sessions
-        SET session_end = NOW(),
-            session_duration = TIMESTAMPDIFF(SECOND, session_start, NOW())
-        WHERE session_id = :session_id
+        SET
+            session_end = CURRENT_TIMESTAMP,
+            session_duration = TIMESTAMPDIFF(
+                SECOND,
+                session_start,
+                CURRENT_TIMESTAMP
+            )
+        WHERE session_id = ?
+          AND user_id = ?
+          AND session_end IS NULL
     ");
-    $stmt->execute([':session_id' => $_SESSION['db_session_id']]);
 
-    return true;
+    $stmt->execute([
+        $_SESSION['session_id'],
+        $_SESSION['user_id']
+    ]);
+
+    unset($_SESSION['session_id']);
 }
